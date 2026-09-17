@@ -1,8 +1,4 @@
 # NetPulse
-This Project is dedicated for the implementation of the various commands of Networking and Communication's designed and Implemented on Python.
-
-<br>
-Alias - NetSpectre.
 
 Network diagnostics and live traffic monitoring, in a desktop app.
 

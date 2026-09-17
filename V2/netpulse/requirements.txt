@@ -1,0 +1,9 @@
+# Desktop interface
+PySide6>=6.6,<7
+
+# Adapter counters, socket table, process attribution
+psutil>=5.9
+
+# Optional: adds MX, NS, TXT and SOA lookups.
+# Without it the DNS tool falls back to the standard library (A, AAAA, PTR).
+dnspython>=2.4
