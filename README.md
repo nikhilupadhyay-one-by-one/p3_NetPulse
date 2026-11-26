@@ -44,6 +44,6 @@ python main.py
 - This is a local diagnostic utility, not a firewall, antivirus, packet analyzer or security scanner.
 
 ## V3 changes
-V3 deliberately consolidates the app into a single readable file and reduces scope to the core features. It removes the separate view/core module architecture from the earlier build and keeps the interface and operations straightforward for learning and interview discussion.
+V3 was made deliberately to consolidate the app into a single readable file and reduces scope to the core features. It removes the separate view/core module architecture from the earlier build and keeps the interface and operations straightforward for learning and interview discussion.
 
 The earlier versions are preserved in the repository's `.old_builds` folder for reference.
