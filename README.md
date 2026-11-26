@@ -1,6 +1,7 @@
 # NetPulse V3
 
 A lightweight desktop network monitor and diagnostic utility. V3 keeps the main application in **one Python file (`main.py`)** so it is easier to read, explain, and modify.
+Please Note this Project was made to check internet speeds locally and has no intention of replacing the current standards like internet speed test like google and others...
 
 ## Features
 - **Traffic:** samples OS network counters once per second and calculates upload/download rates.
