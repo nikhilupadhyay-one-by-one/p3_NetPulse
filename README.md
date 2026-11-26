@@ -1,49 +1,53 @@
-# NetPulse V3
+# NetPulse 3.0.0
 
-A lightweight desktop network monitor and diagnostic utility. V3 keeps the main application in **one Python file (`main.py`)** so it is easier to read, explain, and modify.
-Please Note this Project was made to check internet speeds locally and has no intention of replacing the current standards like internet speed test like google and others...
+Cross-platform network monitoring and diagnostic desktop application, rewritten as a **single application source file (`app.py`)**. It uses Python, PySide6 and psutil. The optional `dnspython` package enables advanced DNS record lookups.
 
 ## Features
-- **Traffic:** samples OS network counters once per second and calculates upload/download rates.
-- **Connections:** displays sockets, protocol, local/remote endpoint, state and process (refresh manually; some process details may require elevated permissions).
-- **Diagnostics:** ping, traceroute and DNS lookup for hosts you are authorized to test.
-- **Simple UI:** three tabs, no database, no background service, and no telemetry built into the app.
+- Live adapter-level receive/send rates and session totals
+- Socket/process connection table with filtering
+- Ping analysis (latency, packet loss, min/average/max and jitter when parsable)
+- Traceroute parsing for Windows and Unix-like systems
+- DNS A/AAAA using stdlib fallback; advanced DNS record types with dnspython
+- TCP port scan with common service labels and flexible port/range input
+- Local IPv4 discovery based on TCP probes plus ARP-cache entries
+- CSV and JSON export for table data
+- CLI and desktop UI share the same functions
 
-## Requirements
-- Python 3.10 or newer
-- Windows, Linux or macOS (command availability varies by OS)
-
-## Run from source
+## Setup
 ```bash
 python -m venv .venv
+# Windows: .venv\Scripts\activate
+# Linux/macOS: source .venv/bin/activate
+python -m pip install -r requirements.txt
+python app.py
 ```
-Windows:
-```bat
-.venv\Scripts\activate
-```
-Linux/macOS:
+
+## CLI
 ```bash
-source .venv/bin/activate
+python app.py interfaces
+python app.py ping example.com -c 5
+python app.py trace example.com --hops 20
+python app.py dns example.com -t MX
+python app.py scan 192.168.1.1 22,80,443,8000-8100
+python app.py connections
+python app.py devices 192.168.1.0/24
 ```
-Then:
-```bash
-pip install -r requirements.txt
-python main.py
+
+## Limitations and honest scope
+- Bandwidth is measured at the adapter level; connections are attributed to processes, but per-process bandwidth accounting is not implemented.
+- Port scanning only tests TCP connection availability. It is not an exploit or vulnerability scanner.
+- Device discovery uses limited TCP probes and the local ARP cache. Devices that block probes may not be detected; MAC/vendor identification is not bundled in this single-file rewrite.
+- Some network commands may require elevated privileges or be absent on the host OS.
+- Parsing of system ping/traceroute output varies by platform and locale; raw output is not currently shown in the GUI for every tool.
+- The desktop UI needs PySide6; CLI-only commands do not launch the GUI unless no command is supplied.
+
+## Project layout
+```
+NetPulse/
+  app.py                 # All application code
+  requirements.txt
+  README.md
+  CHANGELOG.md
 ```
 
-## How it works
-- **Throughput:** `psutil.net_io_counters()` returns cumulative byte counters. NetPulse subtracts the previous sample and divides by elapsed time to calculate a rate.
-- **Connections:** `psutil.net_connections()` lists socket information; process names are looked up by PID.
-- **Diagnostics:** DNS uses Python's `socket` library. Ping and traceroute call the operating system's command-line utilities and display their output.
-
-## Limitations and safety
-- Connection visibility can be limited by operating-system permissions.
-- Traceroute may not be installed; firewall rules can block diagnostics.
-- A port or connection being visible does not, by itself, indicate malicious activity.
-- Use network diagnostics only on systems/networks you own or are authorized to assess.
-- This is a local diagnostic utility, not a firewall, antivirus, packet analyzer or security scanner.
-
-## V3 changes
-V3 was made deliberately to consolidate the app into a single readable file and reduces scope to the core features. It removes the separate view/core module architecture from the earlier build and keeps the interface and operations straightforward for learning and interview discussion.
-
-The earlier versions are preserved in the repository's `.old_builds` folder for reference.
+This deliberately prioritizes a single readable application file over a multi-module architecture. No telemetry or remote data service is used.
